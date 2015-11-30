@@ -1,28 +1,268 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+#include<fstream>
+#include<iostream>
+#include<string.h>
+using namespace std;
+struct datacsv
+{
 
-# Precompiled Headers
-*.gch
-*.pch
+	
+	char uid[10];
+	char name[20];
+	char email[20];
+	char phno[20];
+	char address[20];
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+	
+}a[10];
 
-# Fortran module files
-*.mod
+struct subcsv
+{
+    char name1[20];
+	char email1[20];
+	char phno1[20];
+	char address1[20];
+	
+	
+}b[10];
+ 
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
 
-# Executables
-*.exe
-*.out
-*.app
+int main()
+{ 
+
+int i,n,h;
+cout<<"enter the no of records in master file";
+cin>>n;
+cout<<"enter the no of records in csv file";
+cin>>h;
+ofstream f;
+f.open("csvmaster.dat",ios::out|ios::binary);
+for(i=0;i<n;i++)
+{
+		cout<<"\n enter name:";
+		cin>>a[i].name;
+		int x=strlen(a[i].name);
+		a[i].name[x]=',';
+		
+		cout<<"\n enter uid:";
+		cin>>a[i].uid;
+		int y=strlen(a[i].uid);
+		a[i].uid[y]=',';
+		
+		cout<<"\n enter email:";
+		cin>>a[i].email;
+		int z=strlen(a[i].email);
+		a[i].email[z]=',';
+		
+		cout<<"\n enter phno:";
+		cin>>a[i].phno;
+		int p=strlen(a[i].phno);
+		a[i].phno[p]=',';
+		
+		cout<<"\n enter address:";
+		cin>>a[i].address;
+		int q=strlen(a[i].address);
+		a[i].address[q]=',';
+		
+				
+		f.write((char*)(&a[i]),sizeof(datacsv));
+
+}
+
+f.close();
+ofstream f1;
+f1.open("csv.dat",ios::out|ios::binary);
+for(i=0;i<h;i++)
+{
+		cout<<"\n enter name:";
+		cin>>b[i].name1;
+		int x1=strlen(b[i].name1);
+		b[i].name1[x1]=',';
+		
+		
+		
+		cout<<"\n enter email:";
+		cin>>b[i].email1;
+		int z1=strlen(b[i].email1);
+		b[i].email1[z1]=',';
+		
+		cout<<"\n enter phno:";
+		cin>>b[i].phno1;
+		int p1=strlen(b[i].phno1);
+		b[i].phno1[p1]=',';
+		
+		cout<<"\n enter address:";
+		cin>>b[i].address1;
+		int q1=strlen(b[i].address1);
+		b[i].address1[q1]=',';
+		
+				
+		f1.write((char*)(&b[i]),sizeof(subcsv));
+
+}
+f1.close();
+fstream f2,f3;
+char newuid[5][10]={"5678,","888,","854,","55,","667,"};
+int y=0;
+
+f2.open("csvmaster.dat", ios::in|ios::binary|ios::out);
+f3.open("csv.dat",ios::in|ios::binary|ios::out);
+
+int j,flag=0;
+for(i=0;i<h;i++)
+{        flag=0;
+		f3.read((char*)(&b[i]),sizeof(subcsv));
+				
+				for(j=0;j<n;j++)
+					{
+						f2.read((char*)(&a[j]),sizeof(datacsv));
+									if(strcmp(b[i].email1,a[j].email)!=0)
+									flag+=1;
+				
+			}
+									if(flag==n)
+									{   cout<<"FILE APPENDED";
+										strcpy(a[n].name,b[i].name1);
+										strcpy(a[n].email,b[i].email1);
+										strcpy(a[n].phno,b[i].phno1);
+										strcpy(a[n].address,b[i].address1);
+										strcpy(a[n].uid,newuid[y++]);
+										f2.write((char*)(&a[n]),sizeof(datacsv));
+										n++;
+			
+									}		
+					
+	
+}
+		f2.close();
+		f3.close();
+
+
+
+		fstream f6,f7;
+		f6.open("csvmaster.dat", ios::in|ios::binary|ios::out);
+f7.open("csv.dat",ios::in|ios::binary|ios::out);
+
+cout<<"\n\nmaster file contents:";
+cout<<"\n\n";				
+for(i=0;i<n;i++)
+
+{	f6.read((char*)(&a[i]),sizeof(datacsv));
+		
+		   	{
+			cout<<"\n\nrecord "<<i+1;
+		   	cout<<"\n\n";
+		   	cout<<"\nname:"<<a[i].name;
+			cout<<"\nuid:"<<a[i].uid;
+			cout<<"\nemail:"<<a[i].email;
+			cout<<"\nphone number:"<<a[i].phno;
+			cout<<"\naddress:"<<a[i].address;
+            }	
+}
+
+
+cout<<"\n\nsub file contents:";
+cout<<"\n\n";				
+for(i=0;i<h;i++)
+
+{	f7.read((char*)(&b[i]),sizeof(subcsv));
+		
+		   	{
+			cout<<"\n\nrecord "<<i+1;
+		   	cout<<"\n\n";
+		   	cout<<"\nname:"<<b[i].name1;
+			cout<<"\nemail:"<<b[i].email1;
+			cout<<"\nphone number:"<<b[i].phno1;
+			cout<<"\naddress:"<<b[i].address1;
+            }	
+}
+
+f6.close();
+f7.close();
+int r;
+fstream f4;
+f4.open("csvmaster.dat",ios::binary|ios::in|ios::out);
+
+
+do
+{
+	
+	cout<<"\n\n\n\n\n\n";
+	cout<<"MENU";
+	cout<<"\n\n1.search with email\n2.search with phone number\n3.search with unique id\n\nenter choice:";
+	cin>>r;
+	
+	if(r==1)
+       { f4.seekg(0,ios::beg);
+       	char p3[25];
+       	int x3;
+		   cout<<"enter email id(----@gmail.com)";
+		   cin>>p3;
+		   x3=strlen(p3);
+		   p3[x3]=',';
+		   cout<<"email detected:"<<p3;
+		   for(i=0;i<n;i++)
+		   {
+		   	f4.read((char*)(&a[i]),sizeof(datacsv));
+		   	if(strcmp(a[i].email,p3)==0)
+		   	{cout<<"\n\nRECORD FOUND!!";
+		   	cout<<a[i].name;
+			cout<<a[i].uid;
+			cout<<a[i].email;
+			cout<<a[i].phno;
+			cout<<a[i].address;
+		   	
+		   	}
+		   }
+       }	
+		else if(r==2)
+       { f4.seekg(0,ios::beg);
+       	char p4[25];
+       	int x4;
+		   cout<<"\n\nenter phone number:";
+		   cin>>p4;
+		   x4=strlen(p4);
+		   p4[x4]=',';
+		   cout<<"phone number detected"<<p4;
+		   for(i=0;i<n;i++)
+		   {
+		   	f4.read((char*)(&a[i]),sizeof(datacsv));
+		   	if(strcmp(a[i].phno,p4)==0)
+		   	{cout<<"\n\nRECORD FOUND!!";
+		   	cout<<a[i].name;
+			cout<<a[i].uid;
+			cout<<a[i].email;
+			cout<<a[i].phno;
+			cout<<a[i].address;
+		   	
+		   	}
+		   }
+       }
+	   
+	   
+	   		else if(r==3)
+       {f4.seekg(0,ios::beg);
+       	char p5[25];
+       	int x5;
+		   cout<<"\nenter uid:";
+		   cin>>p5;
+		   x5=strlen(p5);
+		   p5[x5]=',';
+		   for(i=0;i<n;i++)
+		   {
+		   	f4.read((char*)(&a[i]),sizeof(datacsv));
+		   	if(strcmp(a[i].uid,p5)==0)
+		   	{cout<<"\n\nRECORD FOUND!!!\n";
+		   	cout<<a[i].name;
+			cout<<a[i].uid;
+			cout<<a[i].email;
+			cout<<a[i].phno;
+			cout<<a[i].address;
+		   	
+		   	}
+		   }
+       }	
+}while(r<=3);
+f4.close();
+return 0;
+}
